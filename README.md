@@ -19,7 +19,7 @@ To access MySQL or MariaDB, open a terminal on the server where the database is 
 ```bash
 mysql -u root -p
 
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_password';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
 
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
 
