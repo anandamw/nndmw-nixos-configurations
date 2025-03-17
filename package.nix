@@ -25,6 +25,7 @@
   vscode
   google-chrome
   anydesk
+  fastfetch
   git
   php.packages.composer
   #php82
@@ -45,7 +46,6 @@
   drawio
  ];
 }
-
 
 
 

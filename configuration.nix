@@ -7,18 +7,36 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+      ./package.nix
       ./hardware-configuration.nix
       ./modules/services/lampstack.nix
-      ./modules/nix-pkgs/pkgs.nix
+      # Impor modul Home Manager untuk integrasi dengan NixOS
+     # <home-manager/nixos>
+
     ];
 
+
+   # Ensure systemd tmpfiles creates the folder with the correct permissions
+  systemd.tmpfiles.rules = [
+    "d /var/www/html 0755 nndmw root - -"
+  ];
+
+  # Ensure the folder exists and has the correct ownership on rebuild
+  system.activationScripts.ensureWWW = ''
+    mkdir -p /var/www/html
+    chown nndmw:root /var/www/html
+    chmod 755 /var/www/html
+  '';
+
+  # Konfigurasi Home Manager untuk pengguna
+  home-manager.users.nndmw = { pkgs, ... }: {
+    home.packages = [ pkgs.atool pkgs.httpie ];
+    programs.bash.enable = true;  # Mengaktifkan Bash untuk pengguna
+    home.stateVersion = "24.11";  # Versi Home Manager yang kompatibel
+  };
  
   # Enable the Flakes feature and the accompanying new nix command-line tool
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
-  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];  
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -55,11 +73,11 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
+  
   # Enable sound with pipewire.
+  #hardware.pulseaudio.enable = false;  	
   services.pulseaudio.enable = false;
-  
-  
+ #security.rtkit.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
