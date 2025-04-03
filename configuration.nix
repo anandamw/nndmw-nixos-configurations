@@ -8,11 +8,10 @@
   imports =
     [ # Include the results of the hardware scan.
       ./package.nix
+      ./modules/docker/docker.nix
       ./hardware-configuration.nix
       ./modules/services/lampstack.nix
-      # Impor modul Home Manager untuk integrasi dengan NixOS
-     # <home-manager/nixos>
-
+ 
     ];
 
 
